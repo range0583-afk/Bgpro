@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101010">
+<title>Baguette Pro — Digital Menu</title>
+<style>
+:root{--bg:#101010;--panel:#1b1b1b;--panel2:#252525;--gold:#FFD000;--cream:#fff8e8;--muted:#b7b1a5;--line:#383838;--green:#25b765;--red:#b84242}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--cream);font-family:Arial,Helvetica,sans-serif}button,input,select,textarea{font:inherit}
+.hero{padding:28px 18px 22px;background:linear-gradient(135deg,#2c2110,#111 65%);border-bottom:1px solid #725300}.hero-inner{max-width:1000px;margin:auto}.brand{font-weight:900;letter-spacing:2px;font-size:29px;color:var(--gold)}.tag{color:#ddd;margin-top:7px;font-size:13px}.offer{margin-top:18px;padding:13px 15px;border:1px solid #8F6900;border-radius:14px;background:#211b10;color:#FFE66D;font-weight:700;line-height:1.5}
+.offer-carousel{position:relative;min-height:210px;display:flex;align-items:flex-end;overflow:hidden;transition:opacity .35s ease,transform .35s ease;background:linear-gradient(110deg,#100d08,#30200d);background-size:cover;background-position:center;border:1px solid #A87900;border-radius:16px;padding:18px;box-shadow:0 12px 30px #0008}.offer-carousel.show-next{opacity:.35;transform:translateY(4px)}.offer-kicker{display:block;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#FFD000;margin-bottom:3px}.offer-main{display:block;font-size:15px;font-weight:800}.offer-sub{display:block;font-size:13px;color:#FFF3B0;margin-top:5px;font-weight:500}.offer-copy{position:relative;z-index:1;max-width:75%;padding:12px 15px;border-radius:12px;background:linear-gradient(90deg,#090909ed,#0909099c 75%,transparent);text-shadow:0 2px 5px #000}.offer-price{display:inline-block;margin-top:8px;background:#FFD000;color:#17110a;font-size:22px;font-weight:1000;padding:5px 14px;border-radius:8px;box-shadow:0 3px 0 #B8860B}.offer-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}.offer-shade{position:absolute;inset:0;background:linear-gradient(90deg,#090909bb 0%,#09090955 58%,#09090918);z-index:0}.item-photo{width:calc(100% + 28px);height:155px;object-fit:cover;margin:-14px -14px 10px;border-radius:14px 14px 8px 8px;background:#2c2419}.item-photo-placeholder{font-size:42px;display:flex;align-items:center;justify-content:center;min-height:130px;margin:-2px -2px 7px;border-radius:11px;background:radial-gradient(circle at 50% 35%,#59401e 0,#302316 43%,#211b14 78%)}.admin-photo-preview{width:100%;max-height:125px;object-fit:cover;border-radius:9px;grid-column:1/-1;background:#302719}.photo-tools{grid-column:1/-1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.photo-tools input{flex:1;min-width:180px}.photo-hint{font-size:11px;color:var(--muted);grid-column:1/-1}.wrap{max-width:1000px;margin:auto;padding:16px 16px 105px}.search{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:white;font-size:15px;outline:none}.search:focus,.field:focus,.admin-input:focus{border-color:var(--gold);outline:2px solid #FFD00033}
+.cats{display:flex;gap:8px;overflow:auto;padding:14px 0;position:sticky;top:0;background:var(--bg);z-index:2}.cat{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--cream);padding:9px 13px;cursor:pointer}.cat.active{background:var(--gold);color:#17120a;border-color:var(--gold);font-weight:700}
+.section-title{font-size:20px;margin:14px 0;color:var(--gold)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.item{background:linear-gradient(180deg,#25211b 0%,var(--panel) 42%);border:1px solid var(--line);border-radius:15px;padding:14px;display:flex;flex-direction:column;min-height:168px;min-width:0}.emoji{font-size:34px;display:flex;align-items:center;justify-content:center;min-height:78px;margin:-2px -2px 7px;border-radius:11px;background:radial-gradient(circle at 50% 35%,#59401e 0,#302316 43%,#211b14 78%);text-shadow:0 4px 12px #000;font-size:42px}.item h3{font-size:16px;margin:9px 0 5px;overflow-wrap:anywhere}.desc{font-size:12px;color:var(--muted);line-height:1.5;flex:1}.bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}.price{font-weight:800;color:var(--gold);font-size:17px}.add,.admin-action{border:0;border-radius:10px;background:var(--gold);color:#17120a;font-weight:800;padding:10px 12px;cursor:pointer}.add:active,button:active{transform:scale(.98)}
+.cartbar{position:fixed;bottom:12px;left:12px;right:12px;max-width:600px;margin:auto;background:var(--gold);color:#18120a;border-radius:15px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 8px 35px #0009;cursor:pointer;font-weight:800;z-index:5}
+.modal{position:fixed;inset:0;background:#000b;z-index:10;display:none;align-items:flex-end;justify-content:center;padding:0}.modal.open{display:flex}.sheet{width:100%;max-width:760px;max-height:92vh;overflow:auto;background:#171717;border:1px solid var(--line);border-radius:20px 20px 0 0;padding:18px}.sheethead{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-18px;background:#171717;padding:5px 0 10px;z-index:2}.sheethead h2{margin:6px 0;font-size:21px}.close{background:var(--panel2);color:white;border:0;border-radius:9px;padding:9px 12px;cursor:pointer}.cartline{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:10px;border-bottom:1px solid var(--line);padding:13px 0}.qty{display:flex;align-items:center;gap:8px}.qty button{border:0;border-radius:8px;background:var(--panel2);color:white;width:30px;height:30px;font-size:18px;cursor:pointer}.totalrow{display:flex;justify-content:space-between;font-size:19px;font-weight:800;padding:18px 0}.field,.admin-input,.admin-select{display:block;width:100%;padding:12px;margin:8px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:white;min-width:0}.checkout{width:100%;padding:14px;background:var(--green);color:white;border:0;border-radius:12px;font-weight:800;font-size:16px;cursor:pointer}.note{color:var(--muted);font-size:12px;line-height:1.5;margin-top:14px}.adminbtn{position:fixed;right:12px;bottom:78px;z-index:6;border:1px solid #8F6900;border-radius:12px;background:#211b10;color:#FFE66D;padding:10px 13px;font-weight:800;cursor:pointer}
+.admin-section{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.admin-section h3{margin:5px 0 12px}.admin-list{display:grid;gap:10px}.admin-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}.admin-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.admin-card-top strong{overflow-wrap:anywhere}.admin-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(105px,1fr);gap:8px}.admin-fields .wide{grid-column:1/-1}.admin-fields input,.admin-fields select,.admin-fields textarea{width:100%;min-width:0;padding:10px;border-radius:8px;border:1px solid var(--line);background:#101010;color:white}.admin-fields textarea{resize:vertical;min-height:60px}.admin-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.admin-action{margin:0;padding:9px 11px;font-size:13px}.danger{background:var(--red);color:white}.secondary{background:var(--panel2);color:var(--cream);border:1px solid var(--line)}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.form-grid .wide{grid-column:1/-1}.empty{color:var(--muted);padding:18px 0}.status{font-size:12px;color:#9be3b6;min-height:18px;margin-top:6px}.pill{font-size:11px;border:1px solid var(--line);border-radius:99px;padding:4px 8px;color:var(--muted)}.backup-row{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:420px){.grid{gap:9px}.item{padding:11px}.item h3{font-size:15px}.bottom{align-items:flex-start;flex-direction:column}.add{width:100%}.admin-fields{grid-template-columns:1fr}.admin-fields .wide{grid-column:auto}.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:auto}.sheet{padding:14px}}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.modal{align-items:center;padding:18px}.sheet{border-radius:20px;max-height:90vh}.hero{padding-left:18px;padding-right:18px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-inner"><div class="brand">BAGUETTE PRO</div><div class="tag">Burgers • Sandwiches • Crispy • Wings • Broasted</div><div class="offer offer-carousel" id="heroOffer" aria-live="polite">🔥 عروض Baguette Pro اليومية</div></div></header>
+<main class="wrap"><input class="search" id="search" placeholder="Search the menu…" aria-label="Search menu"><nav class="cats" id="cats" aria-label="Menu categories"></nav><div id="menu"></div><p class="note">Prices are shown in USD. Confirm final prices, delivery details and phone number before publishing.</p></main>
+<button class="adminbtn" id="adminOpen">⚙ إدارة المنيو</button>
+<div class="cartbar" id="cartbar" role="button" tabindex="0" aria-label="View order"><span>🛒 View order · <span id="count">0</span> items</span><span id="barTotal">$0.00 →</span></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Your order"><section class="sheet"><div class="sheethead"><h2>Your order</h2><button class="close" id="close">Close ✕</button></div><div id="cartItems"></div><div class="totalrow"><span>Total</span><span id="total">$0.00</span></div><h3>Customer details</h3><input class="field" id="customer" placeholder="Your name" autocomplete="name"><input class="field" id="phone" placeholder="Phone number" inputmode="tel" autocomplete="tel"><input class="field" id="address" placeholder="Delivery address (optional)" autocomplete="street-address"><textarea class="field" id="notes" placeholder="Order notes / extras" rows="2"></textarea><button class="checkout" id="checkout">إرسال الطلب عبر واتساب</button><p class="note">سيتم فتح واتساب برسالة الطلب لتأكيدها مع المطعم.</p></section></div>
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-label="إدارة المنيو"><section class="sheet"><div class="sheethead"><h2>إدارة Baguette Pro</h2><button class="close" id="adminClose">إغلاق ✕</button></div>
+<p class="note">يمكنك تعديل الأسعار والأسماء والأوصاف، ورفع أو تبديل صورة مستقلة لكل صنف وعرض، وإضافة الأصناف والعروض أو تعديلها وحذفها. تُحفظ التغييرات في Supabase أونلاين، وتظهر تلقائيًا لجميع الزبائن بعد تحديث الصفحة. يوجد أيضًا حفظ محلي احتياطي على هذا الجهاز. ملاحظة: كلمة السر هنا قفل بسيط داخل الصفحة وليست حماية خادمية كاملة.</p>
+<div class="admin-section"><h3>الأصناف والأسعار</h3><input class="field" id="adminSearch" placeholder="ابحث عن صنف لتعديله…"><div id="adminProducts" class="admin-list"></div></div>
+<div class="admin-section"><h3>إضافة صنف جديد</h3><div class="form-grid"><input class="field" id="newName" placeholder="اسم الصنف"><select class="field" id="newCategory"><option>Burgers</option><option>Sandwiches</option><option>Meals</option><option>Wings</option><option>Sides</option><option>Offers</option></select><input class="field" id="newPrice" type="number" min="0" step="0.25" placeholder="السعر بالدولار"><input class="field" id="newEmoji" placeholder="رمز تعبيري (اختياري) مثل 🍔"><textarea class="field wide" id="newDesc" placeholder="وصف الصنف (اختياري)" rows="2"></textarea><input class="field wide" id="newImageUrl" placeholder="رابط صورة Supabase (اختياري)"><input class="field wide" type="file" id="newImage" accept="image/*"><span class="photo-hint">ضع رابط Supabase للصورة للحصول على أفضل أداء، أو اختر ملف صورة.</span></div><button class="admin-action" id="addProduct">＋ إضافة الصنف</button></div>
+<div class="admin-section"><h3>العروض اليومية</h3><p class="note">أدخل العرض مرة واحدة. يمكنك لاحقًا تعديل الاسم والسعر والوصف، أو حذفه. أول عرض في القائمة يظهر في الشريط العلوي.</p><div class="form-grid"><input class="field" id="offerName" placeholder="اسم العرض"><input class="field" id="offerPrice" type="number" min="0" step="0.25" placeholder="السعر بالدولار"><textarea class="field wide" id="offerDesc" placeholder="محتويات العرض أو وصفه" rows="2"></textarea><input class="field wide" id="offerImageUrl" placeholder="رابط صورة Supabase (اختياري)"><input class="field wide" type="file" id="offerImage" accept="image/*"><span class="photo-hint">ضع رابط Supabase للصورة، والسعر يبقى في قاعدة البيانات منفصلًا عن الصورة.</span></div><button class="admin-action" id="addOffer">＋ إضافة العرض</button><div id="adminOffers" class="admin-list" style="margin-top:12px"></div></div>
+<div class="admin-section"><h3>نسخة احتياطية</h3><p class="note">نزّل نسخة من الأصناف والعروض، أو استعد نسخة محفوظة سابقًا.</p><div class="backup-row"><button class="admin-action secondary" id="exportData">تنزيل نسخة احتياطية</button><button class="admin-action secondary" id="importButton">استعادة نسخة احتياطية</button><input type="file" id="importFile" accept="application/json,.json" hidden></div><div class="status" id="adminStatus" role="status"></div></div>
+<div class="admin-section"><button class="admin-action danger" id="resetDraft">إعادة ضبط المنيو الأصلي</button></div>
+</section></div>
+<script>
+'use strict';
+
+/* ===== Supabase Online Sync ===== */
+const SUPABASE_URL='https://eenhjkhofkfzwyyecejh.supabase.co';
+const SUPABASE_KEY='sb_publishable_eCB7PNyXFhHtePe0PcKvUQ_mbgBXDYy';
+const SUPABASE_HEADERS={
+  'apikey':SUPABASE_KEY,
+  'Authorization':'Bearer '+SUPABASE_KEY,
+  'Content-Type':'application/json'
+};
+const SUPABASE_PRODUCTS_TABLE='menu_items';
+const SUPABASE_OFFERS_TABLE='offers';
+
+async function sbRequest(path,options={}){
+  const res=await fetch(SUPABASE_URL+'/rest/v1/'+path,{
+    ...options,
+    headers:{...SUPABASE_HEADERS,...(options.headers||{})}
+  });
+  const text=await res.text();
+  if(!res.ok) throw new Error(text||('HTTP '+res.status));
+  if(!text || !text.trim()) return null;
+  try{return JSON.parse(text);}
+  catch(e){return text;}
+}
+function toRemoteProduct(p){
+  return {id:p.id,name:p.name,category:p.category,price:Number(p.price)||0,emoji:p.emoji||'🍽️',desc:p.desc||'',image_url:p.image||null};
+}
+function fromRemoteProduct(p){
+  return {id:p.id,name:p.name,category:p.category,price:Number(p.price)||0,emoji:p.emoji||'🍽️',desc:p.desc||'',...(p.image_url?{image:p.image_url}:{})};
+}
+function toRemoteOffer(o){
+  return {id:o.id,name:o.name,price:Number(o.price)||0,desc:o.desc||'',image_url:o.image||null};
+}
+function fromRemoteOffer(o){
+  return {id:o.id,name:o.name,price:Number(o.price)||0,desc:o.desc||'',...(o.image_url?{image:o.image_url}:{})};
+}
+async function syncRemoteProducts(){
+  for(const p of products){
+    if(isNumericId(p.id)){
+      await sbRequest(SUPABASE_PRODUCTS_TABLE+'?id=eq.'+encodeURIComponent(p.id),{
+        method:'PATCH',headers:{'Prefer':'return=minimal'},
+        body:JSON.stringify(remoteProductData(p))
+      });
+    }else{
+      const created=await sbRequest(SUPABASE_PRODUCTS_TABLE,{
+        method:'POST',headers:{'Prefer':'return=representation'},
+        body:JSON.stringify(remoteProductData(p))
+      });
+      if(Array.isArray(created)&&created[0]&&created[0].id!=null) p.id=created[0].id;
+    }
+  }
+  const remote=await sbRequest(SUPABASE_PRODUCTS_TABLE+'?select=id');
+  const ids=new Set(products.filter(x=>isNumericId(x.id)).map(x=>String(x.id)));
+  const remove=remote.map(x=>x.id).filter(id=>!ids.has(String(id)));
+  if(remove.length) await sbRequest(SUPABASE_PRODUCTS_TABLE+'?id=in.('+remove.map(encodeURIComponent).join(',')+')',{method:'DELETE'});
+}
+async function syncRemoteOffers(){
+  for(const o of dailyOffers){
+    if(isNumericId(o.id)){
+      await sbRequest(SUPABASE_OFFERS_TABLE+'?id=eq.'+encodeURIComponent(o.id),{
+        method:'PATCH',headers:{'Prefer':'return=minimal'},
+        body:JSON.stringify(remoteOfferData(o))
+      });
+    }else{
+      const created=await sbRequest(SUPABASE_OFFERS_TABLE,{
+        method:'POST',headers:{'Prefer':'return=representation'},
+        body:JSON.stringify(remoteOfferData(o))
+      });
+      if(Array.isArray(created)&&created[0]&&created[0].id!=null) o.id=created[0].id;
+    }
+  }
+  const remote=await sbRequest(SUPABASE_OFFERS_TABLE+'?select=id');
+  const ids=new Set(dailyOffers.filter(x=>isNumericId(x.id)).map(x=>String(x.id)));
+  const remove=remote.map(x=>x.id).filter(id=>!ids.has(String(id)));
+  if(remove.length) await sbRequest(SUPABASE_OFFERS_TABLE+'?id=in.('+remove.map(encodeURIComponent).join(',')+')',{method:'DELETE'});
+}
+async function loadFromSupabase(){
+  /* Read each table separately. A failure in offers must never prevent
+     customers from receiving the products table. */
+  let productsLoaded=false, offersLoaded=false;
+  const errors=[];
+
+  try{
+    const rp=await sbRequest(SUPABASE_PRODUCTS_TABLE+'?select=*&order=name.asc');
+    if(Array.isArray(rp)){
+      products=rp.map(fromRemoteProduct);
+      localStorage.setItem('bp_products_v2',JSON.stringify(products));
+      localStorage.setItem('bp_products',JSON.stringify(products));
+      productsLoaded=true;
+    }
+  }catch(err){
+    console.error('Supabase products load failed:',err);
+    errors.push('products');
+  }
+
+  try{
+    const ro=await sbRequest(SUPABASE_OFFERS_TABLE+'?select=*&order=name.asc');
+    if(Array.isArray(ro)){
+      dailyOffers=ro.map(fromRemoteOffer);
+      localStorage.setItem('bp_offers_v2',JSON.stringify(dailyOffers));
+      localStorage.setItem('bp_offers',JSON.stringify(dailyOffers));
+      offersLoaded=true;
+    }
+  }catch(err){
+    console.error('Supabase offers load failed:',err);
+    errors.push('offers');
+  }
+
+  refreshMenu();
+
+  if($('adminStatus')){
+    if(productsLoaded || offersLoaded){
+      $('adminStatus').textContent='✓ تم تحميل المنيو مباشرة من Supabase.'+(errors.length?' (تعذر تحميل: '+errors.join(', ')+')':'');
+    }else{
+      $('adminStatus').textContent='⚠ تعذر الاتصال بـ Supabase — يتم عرض النسخة المحلية فقط.';
+    }
+  }
+  console.log('Baguette Pro remote load:',{productsLoaded,offersLoaded,errors});
+}
+const originalProducts=[
+{name:'Smash Burger',category:'Burgers',price:7,emoji:'🍔',desc:'Smash-style beef burger with fries.'},
+{name:'Smash Mushroom Burger',category:'Burgers',price:7,emoji:'🍔',desc:'Beef, mushrooms and creamy sauce.'},
+{name:'American Burger',category:'Burgers',price:4.5,emoji:'🍔',desc:'Classic American-style burger.'},
+{name:'Lebanese Burger',category:'Burgers',price:5,emoji:'🍔',desc:'A local favorite.'},
+{name:'Chicken Burger',category:'Burgers',price:4,emoji:'🍔',desc:'Juicy chicken burger.'},
+{name:'Cheeseburger',category:'Burgers',price:5,emoji:'🍔',desc:'Beef burger with cheese.'},
+{name:'Cajun Burger',category:'Burgers',price:6,emoji:'🍔',desc:'Bold Cajun seasoning.'},
+{name:'Zinger Sandwich',category:'Sandwiches',price:5,emoji:'🥪',desc:'Crispy spicy chicken with signature sauce.'},
+{name:'Crunchy Twister',category:'Sandwiches',price:7,emoji:'🌯',desc:'Crunchy chicken wrap served with fries.'},
+{name:'Tawook Sandwich',category:'Sandwiches',price:4,emoji:'🥙',desc:'Grilled tawook in fresh bread.'},
+{name:'Fajita Sandwich',category:'Sandwiches',price:7,emoji:'🌯',desc:'Chicken fajita with peppers and sauce.'},
+{name:'Chicken Sub',category:'Sandwiches',price:5,emoji:'🥖',desc:'Chicken sub in a toasted roll.'},
+{name:'Mexican Sandwich',category:'Sandwiches',price:5,emoji:'🌯',desc:'Mexican-inspired chicken sandwich.'},
+{name:'Francisco Sandwich',category:'Sandwiches',price:5,emoji:'🥪',desc:'House-style chicken sandwich.'},
+{name:'Sunday Chicken',category:'Sandwiches',price:5,emoji:'🥪',desc:'A Baguette Pro favorite.'},
+{name:'Chicken Sandwich',category:'Sandwiches',price:4,emoji:'🥪',desc:'Simple, tasty chicken sandwich.'},
+{name:'Turkey & Cheese',category:'Sandwiches',price:5,emoji:'🥖',desc:'Smoked turkey and cheese.'},
+{name:'Makanek Sandwich',category:'Sandwiches',price:5,emoji:'🥖',desc:'Seasoned makanek.'},
+{name:'Soujouk Sandwich',category:'Sandwiches',price:5,emoji:'🥖',desc:'Spiced soujouk.'},
+{name:'Escalope Sandwich',category:'Sandwiches',price:5,emoji:'🥪',desc:'Golden crispy escalope.'},
+{name:'Crispy Sandwich',category:'Sandwiches',price:5,emoji:'🍗',desc:'Crispy chicken with house sauce.'},
+{name:'Potato Sandwich',category:'Sandwiches',price:3,emoji:'🥔',desc:'Golden fries in Arabic bread.'},
+{name:'Steak Sub',category:'Sandwiches',price:6.5,emoji:'🥖',desc:'Steak in a toasted sub roll.'},
+{name:'Philadelphia Deluxe',category:'Sandwiches',price:8.5,emoji:'🥖',desc:'Philly-style steak and cheese.'},
+{name:'Rosto Sandwich',category:'Sandwiches',price:6,emoji:'🥪',desc:'Roast beef sandwich.'},
+{name:'Chicken Wings · 1 kg',category:'Wings',price:8,emoji:'🍗',desc:'Fried or grilled wings. Choose your sauce when ordering.'},
+{name:'Crispy Chicken · 3 pcs',category:'Meals',price:6,emoji:'🍗',desc:'Crispy chicken with fries and homemade sauce.'},
+{name:'Crispy Chicken · 5 pcs',category:'Meals',price:8,emoji:'🍗',desc:'Crispy chicken with fries and homemade sauce.'},
+{name:'Crispy Chicken · 7 pcs',category:'Meals',price:10,emoji:'🍗',desc:'Crispy chicken with fries and homemade sauce.'},
+{name:'Crispy Chicken · 12 pcs',category:'Meals',price:15,emoji:'🍗',desc:'Crispy chicken with fries and homemade sauce.'},
+{name:'Fajita Plate',category:'Meals',price:10,emoji:'🍽️',desc:'Chicken fajita plate.'},
+{name:'Steak Plate',category:'Meals',price:12,emoji:'🍽️',desc:'Steak plate.'},
+{name:'Philadelphia Plate',category:'Meals',price:12,emoji:'🍽️',desc:'Philadelphia-style steak plate.'},
+{name:'Broasted Chicken · 10 pcs',category:'Meals',price:18,emoji:'🍗',desc:'10 pieces of broasted chicken.'},
+{name:'Half Broasted Chicken · 5 pcs',category:'Meals',price:9,emoji:'🍗',desc:'5 pieces of broasted chicken.'},
+{name:'Chicken Nuggets · 5 pcs',category:'Meals',price:6,emoji:'🍗',desc:'Nuggets served with dipping sauce.'},
+{name:'Potato Box · Large',category:'Sides',price:5,emoji:'🍟',desc:'Large portion of golden fries.'},
+{name:'Potato Box · Small',category:'Sides',price:2.5,emoji:'🍟',desc:'Small portion of golden fries.'}
+];
+const categories=['All','Burgers','Sandwiches','Meals','Wings','Sides','Offers'];
+const $=id=>document.getElementById(id);
+function safeLoad(key,fallback){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:fallback}catch(e){return fallback}}
+function makeId(){return 'tmp-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8)}
+function isNumericId(id){return typeof id==='number'||(/^\d+$/.test(String(id)))}
+function remoteProductData(p){return {name:p.name,category:p.category,price:Number(p.price)||0,emoji:p.emoji||'🍽️',desc:p.desc||'',image_url:p.image||null}}
+function remoteOfferData(o){return {name:o.name,price:Number(o.price)||0,desc:o.desc||'',image_url:o.image||null}}
+let products=safeLoad('bp_products_v2',null)||safeLoad('bp_products',null)||originalProducts.map(p=>({...p,id:makeId()}));
+products=products.map(p=>({...p,id:p.id||makeId(),price:Number(p.price)||0,category:categories.includes(p.category)&&p.category!=='All'?p.category:'Sandwiches',emoji:p.emoji||'🍽️',desc:p.desc||''}));
+let dailyOffers=safeLoad('bp_offers_v2',null)||safeLoad('bp_offers',[]);
+dailyOffers=dailyOffers.map(o=>({...o,id:o.id||makeId(),price:Number(o.price)||0,desc:o.desc||''}));
+const defaultOffers=[
+ {name:'10 Wings + 5 Broasted Pieces',price:15,desc:'10 wings + 5 broasted chicken pieces + service'},
+ {name:'10 Wings + 3 Crispy Pieces',price:10,desc:'10 wings + 3 crispy chicken pieces'},
+ {name:'Broasted Chicken · 10 pcs',price:18,desc:'10 pieces broasted chicken'},
+ {name:'Half Broasted Chicken · 5 pcs',price:9,desc:'5 pieces broasted chicken + garlic, pickles and mayonnaise salad'}
+];
+if(!localStorage.getItem('bp_offers_seed_v3') && dailyOffers.length===0){
+ dailyOffers=defaultOffers.map(o=>({...o,id:makeId()}));
+ localStorage.setItem('bp_offers_seed_v3','1');
+}
+
+/* IMPORTANT: Do not automatically upload local/default data on page load.
+   Customers must only READ the online menu from Supabase. Automatic writes here
+   could overwrite the administrator's latest prices and images. */
+
+let active='All',cart={};
+const money=n=>'$'+Number(n||0).toFixed(2);
+const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function compressImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');if(!file.type.startsWith('image/'))return reject(new Error('يرجى اختيار ملف صورة.'));const reader=new FileReader();reader.onerror=()=>reject(new Error('تعذرت قراءة الصورة.'));reader.onload=()=>{const img=new Image();img.onerror=()=>reject(new Error('ملف الصورة غير صالح.'));img.onload=()=>{const max=1100,scale=Math.min(1,max/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL('image/jpeg',.78));};img.src=reader.result;};reader.readAsDataURL(file);});}
+function photoPreview(image,name){return image?`<img class="admin-photo-preview" src="${image}" alt="${escapeHTML(name)}">`:'<div class="photo-hint">لا توجد صورة — يمكنك رفع صورة الآن.</div>';}
+async function persistProducts(){
+  const data=JSON.stringify(products);
+  localStorage.setItem('bp_products_v2',data);localStorage.setItem('bp_products',data);
+  if($('adminStatus')) $('adminStatus').textContent='جارٍ حفظ الأصناف أونلاين…';
+  try{
+    await syncRemoteProducts();
+    if($('adminStatus')) $('adminStatus').textContent='✓ تم حفظ الأسعار والصور في Supabase.';
+  }catch(err){
+    console.error('Supabase products sync failed',err);
+    if($('adminStatus')) $('adminStatus').textContent='✗ فشل الحفظ في Supabase: '+String(err.message||err);
+    throw err;
+  }
+}
+async function persistOffers(){
+  const data=JSON.stringify(dailyOffers);
+  localStorage.setItem('bp_offers_v2',data);localStorage.setItem('bp_offers',data);
+  if($('adminStatus')) $('adminStatus').textContent='جارٍ حفظ العروض أونلاين…';
+  try{
+    await syncRemoteOffers();
+    if($('adminStatus')) $('adminStatus').textContent='✓ تم حفظ العروض والصور في Supabase.';
+  }catch(err){
+    console.error('Supabase offers sync failed',err);
+    if($('adminStatus')) $('adminStatus').textContent='✗ فشل الحفظ في Supabase: '+String(err.message||err);
+    throw err;
+  }
+}
+function allItems(){return [...products.map(p=>({...p,type:'product'})),...dailyOffers.map(o=>({...o,category:'Offers',emoji:'🔥',type:'offer'}))]}
+function findItem(key){return allItems().find(p=>p.type+':'+p.id===key)}
+function renderCats(){ $('cats').innerHTML=categories.map(c=>`<button class="cat ${active===c?'active':''}" data-cat="${escapeHTML(c)}">${escapeHTML(c)}</button>`).join('');document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{active=b.dataset.cat;renderCats();renderMenu()})}
+function renderMenu(){const q=$('search').value.trim().toLowerCase();const shown=allItems().filter(p=>(active==='All'||p.category===active)&&(p.name+' '+p.desc).toLowerCase().includes(q));const groups=active==='All'?categories.slice(1):[active];$('menu').innerHTML=groups.map(g=>{const arr=shown.filter(p=>p.category===g);return arr.length?`<section><h2 class="section-title">${escapeHTML(g)}</h2><div class="grid">${arr.map(p=>`<article class="item">${p.image?`<img class="item-photo" src="${p.image}" alt="${escapeHTML(p.name)}" loading="lazy">`:`<div class="item-photo-placeholder">${escapeHTML(p.emoji||'🍽️')}</div>`}<h3>${escapeHTML(p.name)}</h3><div class="desc">${escapeHTML(p.desc)}</div><div class="bottom"><span class="price">${money(p.price)}</span><button class="add" data-add="${p.type}:${p.id}">+ Add</button></div></article>`).join('')}</div></section>`:''}).join('')||'<p class="empty">No menu items found.</p>';document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{cart[b.dataset.add]=(cart[b.dataset.add]||0)+1;updateCart()})}
+function updateCart(){const entries=Object.entries(cart).filter(([k,q])=>q>0&&findItem(k));const count=entries.reduce((s,[k,q])=>s+q,0);const total=entries.reduce((s,[k,q])=>s+findItem(k).price*q,0);$('count').textContent=count;$('barTotal').textContent=money(total)+' →';$('total').textContent=money(total);$('cartItems').innerHTML=entries.length?entries.map(([k,q])=>{const p=findItem(k);return `<div class="cartline"><div><strong>${escapeHTML(p.name)}</strong><div class="desc">${money(p.price)} each</div></div><div class="qty"><button data-dec="${k}" aria-label="Decrease quantity">−</button><span>${q}</span><button data-inc="${k}" aria-label="Increase quantity">+</button></div><strong>${money(p.price*q)}</strong></div>`}).join(''):'<p class="empty">Your basket is empty. Add something delicious!</p>';document.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{cart[b.dataset.dec]--;if(cart[b.dataset.dec]<=0)delete cart[b.dataset.dec];updateCart()});document.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{cart[b.dataset.inc]++;updateCart()})}
+let offerIndex=0,offerTimer=null;
+function renderOffer(){
+ const el=$('heroOffer');
+ if(!dailyOffers.length){el.style.backgroundImage='';el.innerHTML='<span class="offer-copy"><span class="offer-kicker">BAGUETTE PRO</span><span class="offer-main">🔥 عروض جديدة كل يوم</span><span class="offer-sub">Freshly made, just for you!</span></span>';return;}
+ offerIndex=offerIndex%dailyOffers.length;
+ const o=dailyOffers[offerIndex];
+ el.innerHTML=(o.image?`<img class="offer-photo" src="${o.image}" alt="${escapeHTML(o.name)}">`:'')+'<div class="offer-shade"></div><span class="offer-copy"><span class="offer-kicker">🔥 عرض Baguette Pro</span><span class="offer-main">'+escapeHTML(o.name)+'</span><span class="offer-sub">'+escapeHTML(o.desc||'اطلب الآن عبر واتساب')+'</span><span class="offer-price">'+money(o.price)+'</span></span>';
+ if(offerTimer)clearInterval(offerTimer);
+ if(dailyOffers.length>1){offerTimer=setInterval(()=>{el.classList.add('show-next');setTimeout(()=>{offerIndex=(offerIndex+1)%dailyOffers.length;renderOffer();el.classList.remove('show-next');},300);},5000);}
+}
+const modal=$('modal'),adminModal=$('adminModal');
+function openCart(){modal.classList.add('open');updateCart()}$('cartbar').onclick=openCart;$('cartbar').onkeydown=e=>{if(e.key==='Enter'||e.key===' ')openCart()};$('close').onclick=()=>modal.classList.remove('open');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};$('search').addEventListener('input',renderMenu);
+function refreshMenu(){renderCats();renderMenu();updateCart();renderOffer()}
+function renderAdminProducts(){const q=$('adminSearch').value.trim().toLowerCase();const arr=products.map((p,i)=>({...p,index:i})).filter(p=>(p.name+' '+p.category).toLowerCase().includes(q));$('adminProducts').innerHTML=arr.length?arr.map(p=>`<div class="admin-card" data-product-card="${p.id}"><div class="admin-card-top"><strong>${escapeHTML(p.name)}</strong><span class="pill">${escapeHTML(p.category)}</span></div><div class="admin-fields"><input data-p-name="${p.id}" value="${escapeHTML(p.name)}" aria-label="اسم الصنف"><select data-p-cat="${p.id}" aria-label="فئة الصنف">${categories.filter(c=>c!=='All'&&c!=='Offers').map(c=>`<option ${c===p.category?'selected':''}>${c}</option>`).join('')}<option ${p.category==='Offers'?'selected':''}>Offers</option></select><input type="number" min="0" step="0.25" data-p-price="${p.id}" value="${Number(p.price)}" aria-label="السعر بالدولار"><input data-p-emoji="${p.id}" value="${escapeHTML(p.emoji||'🍽️')}" aria-label="رمز الصنف">${photoPreview(p.image,p.name)}<div class="photo-tools"><input data-p-image-url="${p.id}" value="${escapeHTML(p.image||'')}" placeholder="رابط صورة Supabase" aria-label="رابط صورة الصنف"><input type="file" accept="image/*" data-p-image="${p.id}" aria-label="تبديل صورة الصنف"><button type="button" class="admin-action secondary" data-clear-p-image="${p.id}">إزالة الصورة</button></div><textarea class="wide" data-p-desc="${p.id}" aria-label="الوصف">${escapeHTML(p.desc||'')}</textarea></div><div class="admin-actions"><button class="admin-action" data-save-product="${p.id}">حفظ التعديل</button><button class="admin-action danger" data-delete-product="${p.id}">حذف الصنف</button></div></div>`).join(''):'<p class="empty">لا توجد أصناف مطابقة.</p>';
+document.querySelectorAll('[data-save-product]').forEach(b=>b.onclick=async()=>{const p=products.find(x=>x.id===b.dataset.saveProduct);if(!p)return;const name=$(`unused`);const get=(attr)=>document.querySelector(`[${attr}="${p.id}"]`);const newName=get('data-p-name').value.trim(),priceRaw=get('data-p-price').value,price=Number(priceRaw),category=get('data-p-cat').value;if(!newName||priceRaw===''||!Number.isFinite(price)||price<0){alert('أدخل اسمًا وسعرًا صحيحًا للصنف.');return}p.name=newName;p.price=price;p.category=category;p.emoji=get('data-p-emoji').value.trim()||'🍽️';p.desc=get('data-p-desc').value.trim();const imageUrlEl=get('data-p-image-url');const imageUrl=imageUrlEl?imageUrlEl.value.trim():'';const file=get('data-p-image').files[0];try{if(imageUrl)p.image=imageUrl;else if(file)p.image=await compressImage(file);await persistProducts();renderAdminProducts();refreshMenu();$('adminStatus').textContent='تم حفظ التعديل والصورة.'}catch(e){alert(e.message)}});
+document.querySelectorAll('[data-clear-p-image]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.clearPImage);if(p){delete p.image;persistProducts();renderAdminProducts();refreshMenu();$('adminStatus').textContent='تمت إزالة صورة الصنف.'}});
+document.querySelectorAll('[data-delete-product]').forEach(b=>b.onclick=()=>{const p=products.find(x=>x.id===b.dataset.deleteProduct);if(!p)return;if(confirm('هل تريد حذف الصنف «'+p.name+'»؟')){products=products.filter(x=>x.id!==p.id);delete cart['product:'+p.id];persistProducts();renderAdminProducts();refreshMenu();$('adminStatus').textContent='تم حذف الصنف.'}})}
+function renderAdminOffers(){$('adminOffers').innerHTML=dailyOffers.length?dailyOffers.map(o=>`<div class="admin-card" data-offer-card="${o.id}"><div class="admin-card-top"><strong>${escapeHTML(o.name)}</strong><span class="pill">${money(o.price)}</span></div><div class="admin-fields"><input data-o-name="${o.id}" value="${escapeHTML(o.name)}" aria-label="اسم العرض"><input type="number" min="0" step="0.25" data-o-price="${o.id}" value="${Number(o.price)}" aria-label="سعر العرض">${photoPreview(o.image,o.name)}<div class="photo-tools"><input data-o-image-url="${o.id}" value="${escapeHTML(o.image||'')}" placeholder="رابط صورة Supabase" aria-label="رابط صورة العرض"><input type="file" accept="image/*" data-o-image="${o.id}" aria-label="تبديل صورة العرض"><button type="button" class="admin-action secondary" data-clear-o-image="${o.id}">إزالة الصورة</button></div><textarea class="wide" data-o-desc="${o.id}" aria-label="وصف العرض">${escapeHTML(o.desc||'')}</textarea></div><div class="admin-actions"><button class="admin-action" data-save-offer="${o.id}">حفظ التعديل</button><button class="admin-action danger" data-delete-offer="${o.id}">حذف العرض</button></div></div>`).join(''):'<p class="empty">لا توجد عروض مضافة حاليًا.</p>';
+document.querySelectorAll('[data-save-offer]').forEach(b=>b.onclick=async()=>{const o=dailyOffers.find(x=>x.id===b.dataset.saveOffer);if(!o)return;const get=attr=>document.querySelector(`[${attr}="${o.id}"]`),name=get('data-o-name').value.trim(),raw=get('data-o-price').value,price=Number(raw);if(!name||raw===''||!Number.isFinite(price)||price<0){alert('أدخل اسم العرض وسعرًا صحيحًا.');return}o.name=name;o.price=price;o.desc=get('data-o-desc').value.trim();const imageUrlEl=get('data-o-image-url');const imageUrl=imageUrlEl?imageUrlEl.value.trim():'';const file=get('data-o-image').files[0];try{if(imageUrl)o.image=imageUrl;else if(file)o.image=await compressImage(file);await persistOffers();renderAdminOffers();refreshMenu();$('adminStatus').textContent='تم حفظ العرض والصورة.'}catch(e){alert(e.message)}});
+document.querySelectorAll('[data-clear-o-image]').forEach(b=>b.onclick=()=>{const o=dailyOffers.find(x=>x.id===b.dataset.clearOImage);if(o){delete o.image;persistOffers();renderAdminOffers();refreshMenu();$('adminStatus').textContent='تمت إزالة صورة العرض.'}});
+document.querySelectorAll('[data-delete-offer]').forEach(b=>b.onclick=()=>{const o=dailyOffers.find(x=>x.id===b.dataset.deleteOffer);if(o&&confirm('هل تريد حذف العرض «'+o.name+'»؟')){dailyOffers=dailyOffers.filter(x=>x.id!==o.id);delete cart['offer:'+o.id];persistOffers();renderAdminOffers();refreshMenu();$('adminStatus').textContent='تم حذف العرض.'}})}
+function renderAdmin(){renderAdminProducts();renderAdminOffers();$('adminStatus').textContent=''}
+const ADMIN_PASSWORD='3333';
+$('adminOpen').onclick=()=>{const entered=prompt('أدخل كلمة سر إدارة المنيو:');if(entered===null)return;if(entered!==ADMIN_PASSWORD){alert('كلمة السر غير صحيحة.');return}renderAdmin();adminModal.classList.add('open')};$('adminClose').onclick=()=>adminModal.classList.remove('open');adminModal.onclick=e=>{if(e.target===adminModal)adminModal.classList.remove('open')};$('adminSearch').addEventListener('input',renderAdminProducts);
+$('addProduct').onclick=async()=>{const name=$('newName').value.trim(),category=$('newCategory').value,raw=$('newPrice').value,price=Number(raw),desc=$('newDesc').value.trim(),emoji=$('newEmoji').value.trim()||({'Burgers':'🍔','Sandwiches':'🥪','Wings':'🍗','Sides':'🍟','Meals':'🍽️','Offers':'🔥'}[category]||'🍽️');if(!name||raw===''||!Number.isFinite(price)||price<0){alert('أدخل اسم الصنف وسعرًا صحيحًا.');return}let image=$('newImageUrl').value.trim();try{if(!image)image=await compressImage($('newImage').files[0])}catch(e){alert(e.message);return}products.push({id:makeId(),name,category,price,emoji,desc:desc||'Freshly prepared by Baguette Pro.',...(image?{image}:{})});await persistProducts();$('newName').value='';$('newPrice').value='';$('newDesc').value='';$('newEmoji').value='';$('newImage').value='';$('newImageUrl').value='';renderAdminProducts();refreshMenu();$('adminStatus').textContent='تمت إضافة الصنف.'};
+$('addOffer').onclick=async()=>{const name=$('offerName').value.trim(),raw=$('offerPrice').value,price=Number(raw),desc=$('offerDesc').value.trim();if(!name||raw===''||!Number.isFinite(price)||price<0){alert('أدخل اسم العرض وسعرًا صحيحًا.');return}let image=$('offerImageUrl').value.trim();try{if(!image)image=await compressImage($('offerImage').files[0])}catch(e){alert(e.message);return}dailyOffers.unshift({id:makeId(),name,price,desc,...(image?{image}:{})});await persistOffers();$('offerName').value='';$('offerPrice').value='';$('offerDesc').value='';$('offerImage').value='';$('offerImageUrl').value='';renderAdminOffers();refreshMenu();$('adminStatus').textContent='تمت إضافة العرض، وأصبح أول عرض ظاهرًا في الشريط العلوي.'};
+$('resetDraft').onclick=()=>{if(confirm('إعادة الأصناف الأصلية وحذف جميع تعديلات الأسعار والعروض؟ لا يمكن التراجع عن هذا الإجراء إلا عبر نسخة احتياطية.')){products=originalProducts.map(p=>({...p,id:makeId()}));dailyOffers=[];cart={};persistProducts();persistOffers();renderAdmin();refreshMenu();$('adminStatus').textContent='تمت إعادة ضبط المنيو.'}};
+$('exportData').onclick=()=>{const data={app:'Baguette Pro Digital Menu',version:3,exportedAt:new Date().toISOString(),products,dailyOffers};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='baguette-pro-menu-backup.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);$('adminStatus').textContent='تم تنزيل النسخة الاحتياطية.'};
+$('importButton').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!data||!Array.isArray(data.products)||!Array.isArray(data.dailyOffers))throw new Error('bad format');if(!confirm('ستُستبدل الأصناف والعروض الحالية بمحتوى النسخة الاحتياطية. هل تريد المتابعة؟'))return;products=data.products.map(p=>({...p,id:p.id||makeId(),price:Number(p.price),name:String(p.name||'').trim(),category:categories.includes(p.category)&&p.category!=='All'?p.category:'Sandwiches',emoji:p.emoji||'🍽️',desc:p.desc||''})).filter(p=>p.name&&Number.isFinite(p.price)&&p.price>=0);dailyOffers=data.dailyOffers.map(o=>({...o,id:o.id||makeId(),price:Number(o.price),name:String(o.name||'').trim(),desc:o.desc||''})).filter(o=>o.name&&Number.isFinite(o.price)&&o.price>=0);cart={};persistProducts();persistOffers();renderAdmin();refreshMenu();$('adminStatus').textContent='تم استيراد النسخة الاحتياطية بنجاح.'}catch(err){alert('تعذّر قراءة النسخة. استخدم ملف JSON تم تنزيله من لوحة المنيو.')}finally{e.target.value=''}};
+$('checkout').onclick=()=>{const entries=Object.entries(cart).filter(([k,q])=>q>0&&findItem(k));if(!entries.length){alert('Please add an item to your basket first.');return}const name=$('customer').value.trim(),phone=$('phone').value.trim(),address=$('address').value.trim(),notes=$('notes').value.trim();if(!name||!phone){alert('أدخل اسمك ورقم هاتفك.');return}const lines=entries.map(([k,q])=>{const p=findItem(k);return `${p.name} × ${q} = ${money(p.price*q)}`});const total=entries.reduce((sum,[k,q])=>sum+findItem(k).price*q,0);const message=`طلب جديد - Baguette Pro\nالاسم: ${name}\nهاتف الزبون: ${phone}\nالعنوان: ${address||'غير محدد'}\n${lines.join('\n')}\nالمجموع: ${money(total)}\nملاحظات: ${notes||'لا يوجد'}`;const whatsappNumber='9613364889';window.open('https://wa.me/'+whatsappNumber+'?text='+encodeURIComponent(message),'_blank','noopener');};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal.classList.remove('open');adminModal.classList.remove('open')}});
+async function initMenu(){
+  renderOffer();
+  renderCats();
+  renderMenu();
+  updateCart();
+  await loadFromSupabase();
+}
+initMenu();
+</script>
+</body>
+</html>
